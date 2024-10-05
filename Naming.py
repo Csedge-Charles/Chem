@@ -102,7 +102,7 @@ charge_minus_2 = {
 plus_1_list = ['Hydrogen', 'Lithium', 'Sodium', 
                'Potassium', 'Rubidium', 'Cesium', 
                'Francium', 'Copper(I)', 'Silver(I)', 
-               'Gold(I)',  'Mercury(I)']
+               'Gold(I)',  'Mercury(I)', 'Silver']
 charge_plus_1 = {
     'Hydrogen' : 'H',
     'Lithium' : 'Li',
@@ -115,7 +115,7 @@ charge_plus_1 = {
     'Silver(I)' : 'Ag',
     'Gold(I)' : 'Au',
     'Mercury(I)' : 'Hg',
-    
+    'Silver' : 'Ag',
 }
 plus_2_list = ['Beryllium', 'Magnesium', 'Calcium', 
                'Strongtium', 'Rubidium', 'Barium', 
@@ -154,6 +154,7 @@ charge_plus_3 = {
     'Indium' : 'In',
     'Scandium' : 'Sc',
     'Yttrium' : 'Y',
+    'lanthanum' : 'la',
     'Iron(III)' : 'Fe',
     'Vanadium(III)' : 'V',
     'Iridium(III)' : 'Ir',
@@ -194,7 +195,7 @@ for i in range(100):
     number_2 = ''
     polyatomic_atom = random.choice(polyatomic_name)
     polyatomic_info = polyatomic_dictionary[polyatomic_atom]
-    choice = 4
+    choice = random.randint(2, 3)
 
     if choice == 1:
         print()
