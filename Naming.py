@@ -52,6 +52,13 @@ minus_1_list = ['fluoride', 'chloride', 'bromide', 'iodide',
                 'dihydrogen phosphate', 'bicarbonate',
                 'hydrogen sulfate', 'hydroxide']
 
+f_block = ['lanthanum', 'cerium', 'praseodymium', 'niodymium', 'promethium', 'samarium', 'europium', 'gadolinium',
+           'terbium', 'Dysprosium', 'holmium', 'erbium', 'thulium', 'ytterbium', 'lutetium',
+           'actinium', 'thorium', 'protactinium', 'uranium', 'neptunium', 'plutonium', 'americium', 'curium', 'berkelium',
+           'californium', 'einsteinium', 'fermium', 'mendelevium', 'nobelium', 'lawrencium']
+properties = [3, 'many', 'many', 3, 3, 'many', 'many', 3, 'many', 3, 3, 3, 'many', 'many', 3, 
+              3, 4, 'many', 'many', 'many', 'many', 'many', 'many', 'many', 'many', 3, 3, 3, 'many', 3]
+
 charge_minus_1 = {
     'fluoride' : 'F',
     'chloride' : 'Cl',
@@ -187,7 +194,7 @@ for i in range(100):
     number_2 = ''
     polyatomic_atom = random.choice(polyatomic_name)
     polyatomic_info = polyatomic_dictionary[polyatomic_atom]
-    choice = random.randint(1, 3)
+    choice = 4
 
     if choice == 1:
         print()
@@ -300,5 +307,17 @@ for i in range(100):
             else:
                 print(f'Wrong: {parentheses_1}{polyatomic_info[1]}{parentheses_2}{number_2}{parentheses_3}{atom_2}{parentheses_4}{number_1}')
             print()
-            
+    
+    
+    if choice == 4:
+        pick = random.randint(0, 29)
+        print()
+        print()
+        ans = input(f'Write the charge of {f_block[pick]}. If there are multiple, write "many": ')
+        print()
+        print()
+        if ans == str(properties[pick]):
+            print('Correct')
+        else:
+            print(f'Wrong: {properties[pick]}')          
         
