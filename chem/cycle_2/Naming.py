@@ -195,7 +195,7 @@ for i in range(100):
     number_2 = ''
     polyatomic_atom = random.choice(polyatomic_name)
     polyatomic_info = polyatomic_dictionary[polyatomic_atom]
-    choice = random.randint(2, 3)
+    choice = random.choice([2, 3])
 
     if choice == 1:
         print()
@@ -207,9 +207,6 @@ for i in range(100):
         print()
         
     if choice == 2:
-        
-        
-        
         if polyatomic_info[2] < 0:
             if round(-1 * polyatomic_info[2]) < charge_number:
                 parentheses_1 = '('
@@ -221,6 +218,8 @@ for i in range(100):
             if round(-1 * polyatomic_info[2]) > charge_number:
                 number_1 = number_list[int(-1 * polyatomic_info[2]/ charge_number)]
                 if polyatomic_info[2] == -3 and charge_number == 2:
+                    parentheses_1 = '('
+                    parentheses_2 = ')'
                     number_2 = '₂'
                     number_1 = '₃'
         
