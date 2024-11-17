@@ -68,6 +68,7 @@ def repiece(reactant):
                     element = ''
             if iterator == len(reactant) - 1:
                 new_list.append(element)
+                new_list.append(1)
                 element = ''
         if i.isupper() == False and i not in num_list and i != '(' and i != ')':
             element += i
@@ -97,14 +98,20 @@ def seperate(reactant):
         if type(i) is int:
             if iterator == 0:
                 multiplier = i
-            if parenthasis:
+            if parenthasis and iterator != 0:
                 new_list.append(i * multiplier * multiplier_2)
-            else:
+            if iterator != 0 and parenthasis == False:
                 new_list.append(i * multiplier)
         if type(i) is str and i != ')' and i != '(':
             new_list.append(i)
-            if type(reactant[iterator + 1]) is str and reactant[iterator + 1] != ')' and reactant[iterator + 1] != '(':
-                if parenthasis == True:
+            if iterator + 1 < len(reactant):
+                if type(reactant[iterator + 1]) is str and reactant[iterator + 1] != ')' and reactant[iterator + 1] != '(':
+                    if parenthasis:
+                        new_list.append(multiplier * multiplier_2)
+                    else:
+                        new_list.append(multiplier)
+            if iterator == len(reactant) - 1:
+                if parenthasis:
                     new_list.append(multiplier * multiplier_2)
                 else:
                     new_list.append(multiplier)
@@ -155,125 +162,88 @@ def match(a, b):
             iteration += 1
         iteration = 0
     return remake
-
-
-def reaction(reaction_type, reactant_1, reactant_2):
-    reactant_1_copy = seperate(reactant_1)
-    reactant_2_copy = seperate(reactant_2)
-    total = gather(reactant_1_copy + reactant_2_copy)
-    if reaction_type == 'synthesis':
-        if 'N' in reactant_1 and 'H' in reactant_2:
-            pass
-        else:
-            count = []
-            empt = []
-            for i in range(len(total)):
-                if type(total[i]) is int:
-                    count.append(i)
-                    empt.append(total[i])
-            factor = lcm(empt)
-            for x in range(len(empt)):
-                empt[x] = int(empt[x] / factor)
-            for i in range(len(count)):
-                total[count[i]] = empt[i]
-            if factor == 1:
-                factor = ''
-            return f'{factor}{string(total)}'
-
-def balance(reactant_1, reactant_2, product_1, product_2):  
-    multiplier_1 = 1
-    multiplier_2 = 2
-    if reactant_2 == '':
-        reactant_2 = ''
-        multiplier_1 = 0
-    if product_2 == '':
-        product_2 = ''
-        multiplier_2 = 0
+            
+def combustion(reactant_1, reactant_2):
+    a = reactant_1
+    b = reactant_2
+    c = 'H2O'
+    d = 'CO2'
+    reactant_1 = seperate(reactant_1)
+    reactant_2 = seperate(reactant_2)
+    reactant_3 = seperate('H2O')
+    reactant_4 = seperate('CO2')
     coeff_1 = 1
     coeff_2 = 1
     coeff_3 = 1
     coeff_4 = 1
-    reactant_1_save = str(coeff_1)+reactant_1
-    reactant_2_save = str(coeff_2)+reactant_2
-    product_1_save = str(coeff_3)+product_1
-    product_2_save = str(coeff_4)+product_2
-    
-    reactant_1_copy = seperate(reactant_1_save)
-    reactant_2_copy = seperate(reactant_2_save)
-    reactant_total = gather(reactant_1_copy + reactant_2_copy)
-    product_1_copy = seperate(product_1_save)
-    product_2_copy = seperate(product_2_save)
-    product_total = match(gather(product_1_copy + product_2_copy), reactant_total)
-    count = []
-    empt = []
-    for i in range(len(reactant_total)):
-        if type(reactant_total[i]) is int:
-            count.append(i)
-            empt.append(reactant_total[i])
-    count_2 = []
-    empt_2 = []
-    for i in range(len(product_total)):
-        if type(product_total[i]) is int:
-            count_2.append(i)
-            empt_2.append(product_total[i])
-    while reactant_total != product_total:
-        reactant_1_save = reactant_1
-        reactant_2_save = reactant_1
-        product_1_save = product_1
-        product_2_save = product_2
-        coeff_1 = random.randint(1, 9)
-        if reactant_2 != '':
-            coeff_2 = random.randint(1, 9)
-        coeff_3 = random.randint(1, 9)
-        if product_2 != '':
-            coeff_4 = random.randint(1, 9)
-        reactant_1_save = str(coeff_1)+reactant_1
-        reactant_2_save = str(coeff_2)+reactant_2
-        product_1_save = str(coeff_3)+product_1
-        product_2_save = str(coeff_4)+product_2
+    if 'C' in reactant_1:
+        coeff_4 = reactant_1[1]
+        if reactant_1[3] % 2 != 0:
+            coeff_4 *= 2
+            coeff_1 *= 2
+            coeff_3 = int(reactant_1[3])
+        else:
+            coeff_3 = int(reactant_1[3] / 2)
         
-        reactant_1_copy = seperate(reactant_1_save)
-        reactant_2_copy = seperate(reactant_2_save)
-        reactant_total = gather(reactant_1_copy + reactant_2_copy)
-        product_1_copy = seperate(product_1_save)
-        product_2_copy = seperate(product_2_save)
-        product_total = match(gather(product_1_copy + product_2_copy), reactant_total)
-        count = []
-        empt = []
-        for i in range(len(reactant_total)):
-            if type(reactant_total[i]) is int:
-                count.append(i)
-                empt.append(reactant_total[i])
-        count_2 = []
-        empt_2 = []
-        for i in range(len(product_total)):
-            if type(product_total[i]) is int:
-                count_2.append(i)
-                empt_2.append(product_total[i])
+        if 'O' in reactant_1:
+            if (coeff_4 * 2 + coeff_3 - coeff_1 * reactant_1[5]) % 2 != 0:
+                coeff_2 = int(coeff_4 * 2 + coeff_3 - coeff_1 * reactant_1[5])
+                coeff_1 *= 2
+                coeff_4 *= 2
+                coeff_3 *= 2
+            else:
+                coeff_2 = int((coeff_4 * 2 + coeff_3 - coeff_1 * reactant_1[5]) / 2)
+        else:
+            if (coeff_4 * 2 + coeff_3) % 2 != 0:
+                coeff_2 = int(coeff_4 * 2 + coeff_3)
+                coeff_1 *= 2
+                coeff_4 *= 2
+                coeff_3 *= 2
+            else:
+                coeff_2 = int((coeff_4 * 2 + coeff_3) / 2)
+    if coeff_1 == 1:
+        coeff_1 = ''
+    if coeff_2 == 1:
+        coeff_2 = ''
+    if coeff_3 == 1:
+        coeff_3 = ''
+    if coeff_4 == 1:
+        coeff_4 = ''
+    return f'{coeff_1}{a} + {coeff_2}{b} -> {coeff_4}{d} + {coeff_3}{c}'
                 
-    factor = lcm([coeff_1, coeff_2, coeff_3, coeff_4])
-    if reactant_2 == '' and product_2 == '':
-        factor = lcm([coeff_1, coeff_3])
-        coeff_1 = int(coeff_1 / factor)
-        coeff_3 = int(coeff_3 / factor)
-        if coeff_1 == 1:
-            coeff_1 = ''
-        if coeff_3 == 1:
-            coeff_3 = ''
-        return f'{coeff_1}{reactant_1} -> {coeff_3}{product_1}'
-    if reactant_2 == '':
-        factor = lcm([coeff_1, coeff_3, coeff_4])
-        coeff_1 = int(coeff_1 / factor)
-        coeff_3 = int(coeff_3 / factor)
-        coeff_4 = int(coeff_4 / factor)
-        if coeff_1 == 1:
-            coeff_1 = ''
-        if coeff_3 == 1:
-            coeff_3 = ''
-        if coeff_4 == 1:
-            coeff_4 = ''
-        return f'{coeff_1}{reactant_1} -> {coeff_3}{product_1} + {coeff_4}{product_2}'
-    if product_2 == '':
+
+
+def balance(reactant_1, reactant_2, product_1, product_2):
+    r_1 = reactant_1
+    r_2 = reactant_2
+    p_1 = product_1
+    p_2 = product_2
+    d_r_1 = seperate(r_1)
+    d_r_2 = seperate(r_2)
+    d_p_1 = seperate(p_1)
+    d_p_2 = seperate(p_2)
+    while match(gather(d_r_1 + d_r_2), gather(d_p_1 + d_p_2)) != gather(d_p_1 + d_p_2):
+        r_1 = reactant_1
+        r_2 = reactant_2
+        p_1 = product_1
+        p_2 = product_2
+        coeff_2 = ''
+        coeff_4 = ''
+        coeff_1 = random.randint(1, 100)
+        if reactant_2 != '':
+            coeff_2 = random.randint(1, 100)
+        coeff_3 = random.randint(1, 100)
+        if product_2 != '':
+            coeff_4 = random.randint(1, 100)
+        r_1 = str(coeff_1) + reactant_1
+        r_2 = str(coeff_2) + reactant_2
+        p_1 = str(coeff_3) + product_1
+        p_2 = str(coeff_4) + product_2
+        d_r_1 = seperate(r_1)
+        d_r_2 = seperate(r_2)
+        d_p_1 = seperate(p_1)
+        d_p_2 = seperate(p_2)
+    if reactant_2 != '' and product_2 == '':
         factor = lcm([coeff_1, coeff_2, coeff_3])
         coeff_1 = int(coeff_1 / factor)
         coeff_2 = int(coeff_2 / factor)
@@ -284,8 +254,20 @@ def balance(reactant_1, reactant_2, product_1, product_2):
             coeff_2 = ''
         if coeff_3 == 1:
             coeff_3 = ''
-    
         return f'{coeff_1}{reactant_1} + {coeff_2}{reactant_2} -> {coeff_3}{product_1}'
+    
+    if reactant_2 == '' and product_2 != '':
+        factor = lcm([coeff_1, coeff_3, coeff_4])
+        coeff_1 = int(coeff_1 / factor)
+        coeff_4 = int(coeff_4 / factor)
+        coeff_3 = int(coeff_3 / factor)
+        if coeff_1 == 1:
+            coeff_1 = ''
+        if coeff_3 == 1:
+            coeff_3 = ''
+        if coeff_4 == 1:
+            coeff_4 = ''
+        return f'{coeff_1}{reactant_1} -> {coeff_3}{product_1} + {coeff_4}{product_2}'
     factor = lcm([coeff_1, coeff_2, coeff_3, coeff_4])
     coeff_1 = int(coeff_1 / factor)
     coeff_2 = int(coeff_2 / factor)
@@ -300,7 +282,8 @@ def balance(reactant_1, reactant_2, product_1, product_2):
     if coeff_4 == 1:
         coeff_4 = ''
     return f'{coeff_1}{reactant_1} + {coeff_2}{reactant_2} -> {coeff_3}{product_1} + {coeff_4}{product_2}'
-    
+
+print(combustion('C26H12O32', 'O2'))
 
 def sigfig(num):
     sigfig = 0
