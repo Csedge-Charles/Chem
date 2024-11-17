@@ -1,5 +1,5 @@
 import random
-num_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+num_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 def string(x):
     string = ''
@@ -39,70 +39,80 @@ def list_removal(x):
         if i != '':
             new.append(i)
     return new
-              
-def seperate(reactant):
-    content = []
+     
+
+def repiece(reactant):
+    new_list = []
+    num = ''
     element = ''
     iterator = 0
-    multiplier = 1
+    for i in reactant:
+        if i in num_list:
+            num += i
+            if iterator == len(reactant) - 1:
+                new_list.append(int(num))
+                num = ''
+            if iterator + 1 < len(reactant):
+                if reactant[iterator + 1] not in num_list:
+                    new_list.append(int(num))
+                    num = ''
+        if i == '(':
+            new_list.append('(')
+        if i == ')':
+            new_list.append(')')
+        if i.isupper() and i not in num_list and i != '(' and i != ')':
+            element += i
+            if iterator + 1 < len(reactant):
+                if reactant[iterator + 1].isupper() or reactant[iterator + 1] == '(' or reactant[iterator + 1] == ')' or reactant[iterator + 1] in num_list:
+                    new_list.append(element)
+                    element = ''
+            if iterator == len(reactant) - 1:
+                new_list.append(element)
+                element = ''
+        if i.isupper() == False and i not in num_list and i != '(' and i != ')':
+            element += i
+            new_list.append(element)
+            element = ''
+        iterator += 1
+    return new_list
+
+
+            
+def seperate(reactant):
+    new_list = []
+    reactant = repiece(reactant)
+    iterator = 0
     multiplier_2 = 1
-    iteration = []
     parenthasis = False
-    stop = False
+    multiplier = 1
+    for i in range(len(reactant)):
+        if reactant[i] == ')':
+            multiplier_2 = reactant[i + 1]
+            break
     for i in reactant:
         if i == '(':
-            if reactant[iterator - 1] not in num_list:
-                content.append(1)
-            multiplier_2 = int(reactant[-1])
             parenthasis = True
         if i == ')':
-            parenthasis = False
-        if i.isupper() and i not in num_list:
-            if iterator + 1 <= len(reactant) - 1:
-                if reactant[iterator + 1].isupper():
-                    content.append(i)
-                    content.append(multiplier * multiplier_2)
-            element = ''
-            element += i
-            if iterator == len(reactant) - 1:
-                content.append(element)
-                content.append(multiplier) 
-        elif i.isupper() == False and i not in num_list and i != '(' and i != ')':
-            element += i
-            content.append(element)
-            if reactant[iterator] == reactant[len(reactant) - 1]:
-                content.append(multiplier_2 * multiplier)
-            if iterator + 1 <= len(reactant) - 1:
-                if reactant[iterator + 1].isupper():
-                    content.append(multiplier * multiplier_2)
-        if i in num_list:
+            break
+        if type(i) is int:
             if iterator == 0:
-                multiplier = int(i)
+                multiplier = i
+            if parenthasis:
+                new_list.append(i * multiplier * multiplier_2)
             else:
-                if parenthasis == False:
-                    if reactant[iterator - 1] != ')':
-                        if reactant[iterator - 1] in num_list and reactant[iterator - 2] not in num_list:
-                            content[-1] = (int(reactant[iterator - 1]) * 10 + int(reactant[iterator])) * multiplier
-                            iteration.append(iterator)
-                        if reactant[iterator - 2] in num_list and reactant[iterator - 1] in num_list:
-                            content[-1] = (int(reactant[iterator - 2]) * 100 + int(reactant[iterator - 1]) * 10 + int(reactant[iterator])) * multiplier
-                            iteration.append(iterator)
-                        else:
-                            content.append(element)
-                            content.append(int(i) * multiplier)
+                new_list.append(i * multiplier)
+        if type(i) is str and i != ')' and i != '(':
+            new_list.append(i)
+            if type(reactant[iterator + 1]) is str and reactant[iterator + 1] != ')' and reactant[iterator + 1] != '(':
+                if parenthasis == True:
+                    new_list.append(multiplier * multiplier_2)
                 else:
-                    if reactant[iterator] == ')' and type(reactant[iterator - 1]) is int: 
-                        if int(reactant[iterator - 1]) * multiplier_2 * multiplier >= 10:
-                            content[-1] = (int(reactant[iterator - 1]) * multiplier * multiplier_2)
-                    if stop == False:
-                        content.append(element)
-                        content.append(int(i) * multiplier * multiplier_2)
-
-                    
+                    new_list.append(multiplier)
         iterator += 1
-    return (content)
+        
+    return new_list
+ 
 
-print(seperate('C111H2O2'))
 
 def split(reaction):
     part_1 = ''
