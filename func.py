@@ -84,42 +84,72 @@ def seperate(reactant):
     reactant = repiece(reactant)
     iterator = 0
     multiplier_2 = 1
-    parenthasis = False
+    multiplier_3 = 1
+    again = False
+    parenthasis_1 = False
+    parenthasis_2 = False
     multiplier = 1
+    first = False
     for i in range(len(reactant)):
-        if reactant[i] == ')':
-            multiplier_2 = reactant[i + 1]
-            break
+        if again == True:
+            if reactant[i] == ')':
+                multiplier_3 = reactant[i + 1]
+                again = False
+        if again == False:
+            if reactant[i] == ')':
+                multiplier_2 = reactant[i + 1]
+                again = True
+
     for i in reactant:
         if i == '(':
-            parenthasis = True
+            if first:
+                parenthasis_2 = True
+                parenthasis_1 = False
+                first = False
+            if first == False:
+                parenthasis_1 = True
+                first = True
         if i == ')':
-            break
+            first = False
+            parenthasis_1 = False
         if type(i) is int:
-            if iterator == 0:
-                multiplier = i
-            if parenthasis and iterator != 0:
-                new_list.append(i * multiplier * multiplier_2)
-            if iterator != 0 and parenthasis == False:
-                new_list.append(i * multiplier)
+            if reactant[iterator - 1] != ')':
+                if iterator == 0:
+                    multiplier = i
+                if parenthasis_1 and iterator != 0 and parenthasis_2 == False:
+                    new_list.append(i * multiplier * multiplier_2)
+                if parenthasis_2 and iterator != 0 and parenthasis_1 == False:
+                    new_list.append(i * multiplier * multiplier_3)
+                if iterator != 0 and parenthasis_1 == False and parenthasis_2 == False:
+                    new_list.append(i * multiplier)
         if type(i) is str and i != ')' and i != '(':
             new_list.append(i)
             if iterator + 1 < len(reactant):
-                if type(reactant[iterator + 1]) is str and reactant[iterator + 1] != ')' and reactant[iterator + 1] != '(':
-                    if parenthasis:
-                        new_list.append(multiplier * multiplier_2)
-                    else:
-                        new_list.append(multiplier)
-            if iterator == len(reactant) - 1:
-                if parenthasis:
+                if reactant[iterator + 1] == ')' and first:
                     new_list.append(multiplier * multiplier_2)
+                if reactant[iterator + 1] == ')' and first == False:
+                    new_list.append(multiplier * multiplier_3)
+                if type(reactant[iterator + 1]) is str and reactant[iterator + 1] != ')' and reactant[iterator + 1] != '(':
+                    if parenthasis_1:
+                        new_list.append(multiplier * multiplier_2)
+                    if parenthasis_2:
+                        new_list.append(multiplier * multiplier_3)
+                    if parenthasis_1 == False and parenthasis_2 == False:
+                        new_list.append(multiplier)
+                        
+            if iterator == len(reactant) - 1:
+                if parenthasis_1:
+                    new_list.append(multiplier * multiplier_2)
+                if parenthasis_2:
+                    new_list.append(multiplier * multiplier_3)
                 else:
                     new_list.append(multiplier)
+                    
+            
         iterator += 1
         
     return new_list
  
-
 
 def split(reaction):
     part_1 = ''
@@ -229,12 +259,12 @@ def balance(reactant_1, reactant_2, product_1, product_2):
         p_2 = product_2
         coeff_2 = ''
         coeff_4 = ''
-        coeff_1 = random.randint(1, 100)
+        coeff_1 = random.randint(1, 20)
         if reactant_2 != '':
-            coeff_2 = random.randint(1, 100)
-        coeff_3 = random.randint(1, 100)
+            coeff_2 = random.randint(1, 20)
+        coeff_3 = random.randint(1, 20)
         if product_2 != '':
-            coeff_4 = random.randint(1, 100)
+            coeff_4 = random.randint(1, 20)
         r_1 = str(coeff_1) + reactant_1
         r_2 = str(coeff_2) + reactant_2
         p_1 = str(coeff_3) + product_1
@@ -283,7 +313,17 @@ def balance(reactant_1, reactant_2, product_1, product_2):
         coeff_4 = ''
     return f'{coeff_1}{reactant_1} + {coeff_2}{reactant_2} -> {coeff_3}{product_1} + {coeff_4}{product_2}'
 
-print(combustion('C26H12O32', 'O2'))
+def decomposition(reactant):
+    if reactant == 'NH4OH':
+        return 'NH4OH -> NH3 + H2O'
+    if reactant == 'H2SO4':
+        return 'SO3 + H2O'
+    if reactant == 'H2SO3':
+        return 'SO2 + H2O'
+    if 'ClO3' in reactant:
+        r = seperate(reactant)
+        p = r[0] + r[1]
+        return balance(reactant, '', f'')
 
 def sigfig(num):
     sigfig = 0
